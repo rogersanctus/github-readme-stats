@@ -15,6 +15,7 @@ FROM build-deps AS builder
 COPY ./.env ./
 COPY ./api ./api
 COPY ./src ./src
+COPY ./rollup.config.js ./
 
 ENV NODE_ENV=production
 RUN npm run build
