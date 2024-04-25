@@ -7,7 +7,12 @@ import gistCard from "./api/gist.js";
 import express from "express";
 
 const app = express();
-app.listen(process.env.port || 9000);
+const server_host = process.env.HOST || "127.0.0.1";
+const server_port = process.env.PORT || 9000;
+
+app.listen(server_port, server_host, () => {
+  console.log(`Listening on ${server_host}:${server_port}`);
+});
 
 app.get("/", statsCard);
 app.get("/pin", repoCard);
