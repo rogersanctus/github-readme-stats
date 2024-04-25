@@ -1,20 +1,21 @@
-FROM node:18-alpine3.17 AS base
+FROM node:20.12-alpine3.18 AS base
 WORKDIR /app
+
+COPY ./.env ./
 
 FROM base AS deps
 
 COPY ./package-lock.json ./
 COPY ./package.json ./
 
-FROM deps as build-deps
+RUN npm install
 
-RUN npm i
+FROM deps AS builder
 
-FROM build-deps AS builder
-
-COPY ./.env ./
 COPY ./api ./api
 COPY ./src ./src
+COPY ./themes ./themes
+COPY ./express.js ./
 COPY ./rollup.config.js ./
 
 ENV NODE_ENV=production
@@ -23,6 +24,7 @@ RUN npm run build
 FROM base
 
 COPY --from=builder /app/dist/ ./dist
+COPY ./package.json ./
 
 ENV HOST=0.0.0.0
 CMD ["node", "dist/server/index.js"]
