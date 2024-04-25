@@ -1,0 +1,8 @@
+services:
+  github-readme-stats-app:
+    image: github-readme-stats
+    environment:
+      - PORT=9000
+    build: .
+    ports:
+      - 9000:9000
